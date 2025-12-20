@@ -8,4 +8,5 @@ public interface BankService {
     void withdrawMoney();
     void showAccountDetail();
     void showAllAccount();
+    void showTransaction();
 }

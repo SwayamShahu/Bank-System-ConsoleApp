@@ -8,6 +8,7 @@ import com.bank.model.User;
 import com.bank.repository.BankRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankServiceImpl implements BankService {
@@ -62,7 +63,9 @@ public class BankServiceImpl implements BankService {
         BankRepository.accouts.put(acc.getAccountNumber(), acc);
         System.out.println("Account Created.");
         String record = LocalDateTime.now() + " | " + " credit " + " | " + balance;
-        BankRepository.transaction.add(record);
+        ArrayList<String> list = new ArrayList<>();
+        list.add(record);
+        BankRepository.transactions.put(acc.getAccountNumber(),list);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class BankServiceImpl implements BankService {
         acc.deposit(amount);
 
         String record = LocalDateTime.now() + " | " + " credit " + " | " + amount + " | ";
-        BankRepository.transaction.add(record);
+        BankRepository.transactions.get(acc.getAccountNumber()).add(record);
         System.out.println("Amount deposited succesfully");
     }
 
@@ -106,7 +109,7 @@ public class BankServiceImpl implements BankService {
         acc.withdraw(amount);
 
         String record = LocalDateTime.now() + " | " + " debited " + " | " + amount + " | ";
-        BankRepository.transaction.add(record);
+        BankRepository.transactions.get(acc.getAccountNumber()).add(record);
         System.out.println("Amount withdraw succesfully");
     }
 
@@ -121,7 +124,7 @@ public class BankServiceImpl implements BankService {
         System.out.println(acc);
 
         String record = LocalDateTime.now() + " | " + " check detail " ;
-        BankRepository.transaction.add(record);
+        BankRepository.transactions.get(acc.getAccountNumber()).add(record);
         System.out.println("Account detail display successfully");
     }
 
@@ -132,6 +135,29 @@ public class BankServiceImpl implements BankService {
         for (String accountNumber: BankRepository.accouts.keySet()){
             Account acc = BankRepository.accouts.get(accountNumber);
             System.out.println(acc);
+        }
+    }
+
+    @Override
+    public void showTransaction() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter the page limit: ");
+        int limit = sc.nextInt();
+
+        System.out.println("Enter the page number: ");
+        int pageNumber = sc.nextInt();
+        int startIndex = (pageNumber - 1) * limit;
+
+        sc.nextLine();
+
+        System.out.println("Enter account number: ");
+        String accountNumber = sc.nextLine();
+
+        ArrayList<String> list = BankRepository.transactions.get(accountNumber);
+
+        for (int i = startIndex; i < startIndex + limit && i < list.size(); i++){
+            System.out.println(list.get(i));
         }
     }
 }

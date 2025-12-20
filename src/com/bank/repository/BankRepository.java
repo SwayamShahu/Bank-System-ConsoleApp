@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class BankRepository {
     public static Map<String, Account> accouts = new HashMap<>();
-    public static List<String> transaction = new ArrayList<>();
+    public static Map<String, ArrayList> transactions = new HashMap<>();
+
 
     // prevent object creation
     private BankRepository(){
