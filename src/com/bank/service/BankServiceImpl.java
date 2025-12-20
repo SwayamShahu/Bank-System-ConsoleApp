@@ -23,7 +23,7 @@ public class BankServiceImpl implements BankService {
         name = sc.nextLine();
         System.out.println();
 
-        System.out.print("Enter mobile number; ");
+        System.out.print("Enter mobile number: ");
         mobileNumber = sc.nextLine();
         System.out.println();
 
@@ -60,6 +60,7 @@ public class BankServiceImpl implements BankService {
         }
 
         BankRepository.accouts.put(acc.getAccountNumber(), acc);
+        System.out.println("Account Created.");
         String record = LocalDateTime.now() + " | " + " credit " + " | " + balance;
         BankRepository.transaction.add(record);
     }
@@ -88,17 +89,49 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public void withdrawMoney(Account acc, double amount) {
+    public void withdrawMoney() {
+        Scanner sc = new Scanner(System.in);
 
+        System.out.print("Enter account Number: ");
+        String accountNumber = sc.nextLine();
+        System.out.println();
+
+        Account acc = BankRepository.accouts.get(accountNumber);
+        if (acc == null){
+            throw new AccountNotFound();
+        }
+        System.out.print("Enter the amount to be withdraw: ");
+        double amount = sc.nextDouble();
+        System.out.println();
+        acc.withdraw(amount);
+
+        String record = LocalDateTime.now() + " | " + " debited " + " | " + amount + " | ";
+        BankRepository.transaction.add(record);
+        System.out.println("Amount withdraw succesfully");
     }
 
     @Override
     public void showAccountDetail() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the account number: ");
+        String accountNumber = sc.nextLine();
+        System.out.println();
 
+        Account acc = BankRepository.accouts.get(accountNumber);
+        System.out.println(acc);
+
+        String record = LocalDateTime.now() + " | " + " check detail " ;
+        BankRepository.transaction.add(record);
+        System.out.println("Account detail display successfully");
     }
 
     @Override
     public void showAllAccount() {
+        System.out.println("Account available: ");
 
+        for (String accountNumber: BankRepository.accouts.keySet()){
+            Account acc = BankRepository.accouts.get(accountNumber);
+            System.out.println(acc);
+        }
     }
 }

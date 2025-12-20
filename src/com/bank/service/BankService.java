@@ -5,7 +5,7 @@ import com.bank.model.Account;
 public interface BankService {
     void createAccount();
     void depositMoney();
-    void withdrawMoney(Account acc, double amount);
+    void withdrawMoney();
     void showAccountDetail();
     void showAllAccount();
 }
